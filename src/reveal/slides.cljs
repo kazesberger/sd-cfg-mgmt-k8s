@@ -185,6 +185,8 @@
   [:section
    (note
      [:div
+      [:p "sockshop: not that much templating"]
+      [:p "gitea: one fat template"]
       [:pre "cd ~/git/sips/microservices-demo/deploy/kubernetes/helm-chart/templates"]
       [:pre "grep '{{' *"]
       [:pre "cd ~/git/sips/gitea-helm-chart/templates/gitea"]])
@@ -237,7 +239,7 @@
       "this ain't templating !!!11"
       "...that's a good thing :-)"])])
 
-(def kustomize-examples-1)
+(def kustomize-examples-1) ; TODO show helm template -> kustomize example
 
 (def workflows-bespoke
   [:section
@@ -249,7 +251,13 @@
    {:data-background-image "img/workflowOts.jpg" :data-background-size "contain"}
    [:p " "]])
 
+; TODO reference ship
+
 ; TODO operators
+; TODO operators for stateful apps with complex operations tasks that'd normally require a human interaction.
+; TODO (take stuff from todo.md regarding operators)
+
+; TODO kkthxbye page with twitter-handle / gh-page & acc / bearingpoint we're hiring
 
 (defn all
   "Add here all slides you want to see in your presentation."

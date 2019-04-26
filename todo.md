@@ -2,9 +2,9 @@
 
 ## TODOs as of friday afternoon
 
-* address TODOs in slides code
-* upload slides
-* and/or render pdf (consider https://github.com/hakimel/reveal.js/)
+* [ ] address TODOs in slides code
+* [x] upload slides (gh-pages)
+* [ ] and/or render pdf (consider https://github.com/hakimel/reveal.js/)
 
 ## notes
 
@@ -78,6 +78,9 @@
     * and the operator does this
         * with single-app focus
         * utilizing CRDs
+        
+        
+        
         
 * k8s introduction (fast lane)
     * illustrated children's guide to k8s (phippy)
