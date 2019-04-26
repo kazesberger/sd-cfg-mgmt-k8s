@@ -1,5 +1,11 @@
 # plan
 
+## TODOs as of friday afternoon
+
+* address TODOs in slides code
+* upload slides
+* and/or render pdf (consider https://github.com/hakimel/reveal.js/)
+
 ## notes
 
 * tweet public slide deck (calm the niggrs #pulpfiction by mentioning/showing this on one of first and last slides)

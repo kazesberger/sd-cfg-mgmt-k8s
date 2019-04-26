@@ -12,22 +12,37 @@
    [:h1 "K8s Config Mgmt"]
    [:h3 "Beginners guide"]])
 
-(def intro
-  [:section
-   [:h3 "this is how you DONT do presentations:"]])
+;(def intro
+;  [:section
+;   [:h3 "this is how you DONT do presentations:"]])
 
 (def intro-2
   [:section
-   [:p "This talk provides a beginner friendly introduction to the options available in the space of Kubernetes Configuration Management.\n  Kubernetes Configuration management is declarative and quite explicit. Also the Kubernetes API is extensive.\n  A valid Pod spec contains at least 30 distinct, valid child attributes (k8s v1.13).\n  There is a good chance specs will grow in their number and by numbers of fields.\n  This talk will give a short overview of the problem space and current options to manage configuration changes."]])
+   (note "!read! then -> 'but i want to be more positive about this exciting topic'")
+   [:h3 "the talk description says"]
+   [:p "[..] This talk will give a short overview of the problem space and current options to manage configuration changes."]])
 
 (def intro-positive
   [:section
+   (note [:div
+          [:p "declarative: we tell k8s what we desire and k8s acts to transform current => desired state"]
+          [:p "we tell k8s, we want it to have 'things' -> objects"]
+          [:p "we can do this w/ my fav cmd 'kb apply'"]
+          [:p "make it so"]
+          [:p "k8s needs to know what we're talking about -> resources"]])
    [:h3 "things i like about k8s:"]
    [:p
     (bulletpoints
       ["declarative"
        "kubectl apply"])]
    [:img {:src "img/make-it-so.jpg" :class "fragment" :style "max-height:300px"}]])
+
+(def intro-of-resources-and-objects
+  [:section
+   (note
+     [:div
+      [:p "example: object of type/kind 'Deployment', a resource known to k8s"]])
+   [:pre "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: nginx-deployment\n  labels:\n    app: nginx\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: nginx\n  template:\n    metadata:\n      labels:\n        app: nginx\n    spec:\n      containers:\n      - name: nginx\n        image: nginx:1.7.9\n        ports:\n        - containerPort: 80\n"]])
 
 (def controller-first-encounter
   [:section
@@ -38,6 +53,14 @@
 (def controllers-alien-meme
   [:section
    [:img {:src "img/controllers-alien.jpg"}]])
+
+(def controllers-simplified
+  [:section
+   {:data-background-image "img/controllers-simplified.png" :data-background-size "contain"}
+   [:p " "]])
+   ;[:img {:src "img/controllers-simplified.png"}]])
+
+[:p "k8s is extensible. for special things:  custom resource definitions"]
 
 (def imparative-vs-declarative
   [:section
@@ -54,31 +77,38 @@
 
 (def imparative-vs-declarative-2
   [:section
-   [:h3 "k8s object management"]
-   [:table {:style "white-space:nowrap; width:auto;"}
-    [:thead {:style "font-weight: bold;"}
-     [:th "technique"]
-     [:th "example"]]
-    [:tbody
-     [:tr [:td "imp cmd"] [:td "kubectl run nginx --image nginx"]]
-     [:tr [:td "imp obj config"] [:td "kubectl create -f nginx.yaml"]]
-     [:tr [:td ""] [:td "kubectl delete -f nginx.yaml"]]
-     [:tr [:td ""] [:td "kubectl replace -f nginx.yaml"]]
-     [:tr [:td "decl obj config"][:td "kubectl apply -R -f configs/"]]]]])
+   [:section
+    [:h3 "k8s object management"]
+    [:h5 "imperative vs declarative"]
+    [:table {:style "white-space:nowrap; width:auto;"}
+     [:thead {:style "font-weight: bold;"}
+      [:th "technique"]
+      [:th "example"]]
+     [:tbody
+      [:tr [:td "imp cmd"] [:td "kubectl run nginx --image nginx"]]
+      [:tr [:td "imp obj config"] [:td "kubectl create -f nginx.yaml"]]
+      [:tr [:td ""] [:td "kubectl delete -f nginx.yaml"]]
+      [:tr [:td ""] [:td "kubectl replace -f nginx.yaml"]]
+      [:tr [:td "decl obj config"] [:td "kubectl apply -R -f configs/"]]]]]
+   imparative-vs-declarative])
 
 (def imparative-vs-declarative-3
   [:section
    [:h3 "recap: declarative cfg"]
    (bulletpoints
      ["forget about the HOW, the parts and infra"
-      "manipulate state by declaration of desired state"
-      "utilize git for these declarations"
-      "PR-Workflow gives you 'GitOps'"
-      "we like this - let's not lose it on our journey"])])
+      "manipulate state by declaration of desired state"])])
+(def imparative-vs-declarative-4
+  [:section
+   [:h3 "what we gain"]
+   (bulletpoints
+     ["git ❤ declarative approach"
+      "PR-Workflow gives you 'GitOps'"])])
+   ;[:p {:class "fragment"} "we like this - let's not lose it on our journey"]])
 
 (def sounds-ez
   [:section {:class "fragment"}
-   [:h4 "sounds doable!"]
+   [:h3 "sounds doable!"]
    [:ol
     [:li {:class "fragment"} "Write the App"]
     [:li {:class "fragment"} "Describe its parts using 'Kubernetes-Objects'"]
@@ -87,32 +117,36 @@
 
 (def fun-begins-DRY
   [:section
-   [:h4 "what if..."
-     [:p "Stages"]
-     [:img {:src "img/stages.png"}]]])
+   [:h3 "what if..."]
+   [:p "Stages"]
+   [:img {:src "img/stages.png"}]])
 
 (def fun-begins-DRY-2
   [:section
-   [:h4 "what if..."
-    [:p "customizations"]
-    [:p [:img {:src "img/gopher-orig.png" :style "max-width:120px"}]]
+   [:h3 "what if..."]
+   [:p "Customizations"]
+   [:p [:img {:src "img/gopher-orig.png" :style "max-width:120px"}]]
 
-    [:p
-     [:img {:src "img/gopher-fabulous-viking.png" :style "max-width:120px; margin:30px"}]
-     [:img {:src "img/gopher-cptn-death-docker.png" :style "max-width:120px; margin:10px"}]
-     [:img {:src "img/gopher-hipster.png" :style "max-width:120px; margin:30px"}]]]])
+   [:p
+    [:img {:src "img/gopher-fabulous-viking.png" :style "max-width:120px; margin:30px"}]
+    [:img {:src "img/gopher-cptn-death-docker.png" :style "max-width:120px; margin:10px"}]
+    [:img {:src "img/gopher-hipster.png" :style "max-width:120px; margin:30px"}]]])
 
 (def duplications-DRY
   [:section
    [:img {:src "img/stages-n-customizations.png"}]])
 
 (def DRY-make-point
-  [:section
-   [:h4 "My point here is... DRY"]
+  [:section ;TODO add missing notes starting from here
+   (note "")
+   [:h4  "My point here is..."]
+   [:h3 "DRY"]
    (bulletpoints
      ["face full of yaml"
       "...very similar yaml"
       "duplication is bad"])])
+
+; TODO add more visual stuff and examples
 
 (def templates-by-helm-example
   [:section
@@ -189,19 +223,23 @@
    {:data-background-image "img/workflowOts.jpg" :data-background-size "contain"}
    [:p " "]])
 
+; TODO operators
 
 (defn all
   "Add here all slides you want to see in your presentation."
   []
   [title-slide
-   intro
+   ;intro
    intro-2
    intro-positive
+   intro-of-resources-and-objects
    controller-first-encounter
    controllers-alien-meme
-   imparative-vs-declarative
+   controllers-simplified
+   ;
    imparative-vs-declarative-2
    imparative-vs-declarative-3
+   imparative-vs-declarative-4
    sounds-ez
    fun-begins-DRY
    fun-begins-DRY-2
