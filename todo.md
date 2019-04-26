@@ -72,3 +72,15 @@
     * and the operator does this
         * with single-app focus
         * utilizing CRDs
+        
+* k8s introduction (fast lane)
+    * illustrated children's guide to k8s (phippy)
+    * active management of Cluster to monitor and deliver desired state
+        * Scheduling (eg. replication Controller)
+        * Networking
+        * Services
+        * Storage Backends
+* declarative config
+* DRY
+* upgrades
+* 

@@ -4,8 +4,8 @@
   (let [li-attributes {:class "fragment"}]
     (vec (concat [:ul] (map #(vector :li li-attributes %) items)))))
 
-(defn note [s]
-  [:aside {:class "notes"} s])
+(defn note [component]
+  [:aside {:class "notes"} component])
 
 (def title-slide
   [:section
@@ -23,10 +23,21 @@
 (def intro-positive
   [:section
    [:h3 "things i like about k8s:"]
-   (bulletpoints
-     ["declarative"
-      "kubectl apply"
-      [:img {:src "img/make-it-so.jpg"}]])])
+   [:p
+    (bulletpoints
+      ["declarative"
+       "kubectl apply"])]
+   [:img {:src "img/make-it-so.jpg" :class "fragment" :style "max-height:300px"}]])
+
+(def controller-first-encounter
+  [:section
+   [:p "we declare stuff, then..."]
+   [:img {:src "img/magical-dr-evil.jpg"}]
+   [:p "...now the state is as we desired?"]])
+
+(def controllers-alien-meme
+  [:section
+   [:img {:src "img/controllers-alien.jpg"}]])
 
 (def imparative-vs-declarative
   [:section
@@ -74,63 +85,109 @@
     [:li {:class "fragment"} "kubectl apply -f config/"]]
    [:img {:src "img/loc-msvc-demo.png" :class "fragment"}]])
 
-(def fun-begins ; TODO make these pictures not bulletpoints
+(def fun-begins-DRY
   [:section
-   [:h4 "what if..."]
+   [:h4 "what if..."
+     [:p "Stages"]
+     [:img {:src "img/stages.png"}]]])
+
+(def fun-begins-DRY-2
+  [:section
+   [:h4 "what if..."
+    [:p "customizations"]
+    [:p [:img {:src "img/gopher-orig.png" :style "max-width:120px"}]]
+
+    [:p
+     [:img {:src "img/gopher-fabulous-viking.png" :style "max-width:120px; margin:30px"}]
+     [:img {:src "img/gopher-cptn-death-docker.png" :style "max-width:120px; margin:10px"}]
+     [:img {:src "img/gopher-hipster.png" :style "max-width:120px; margin:30px"}]]]])
+
+(def duplications-DRY
+  [:section
+   [:img {:src "img/stages-n-customizations.png"}]])
+
+(def DRY-make-point
+  [:section
+   [:h4 "My point here is... DRY"]
    (bulletpoints
-     [[:img {:src "img/stages.png"}]
-      "Customizations"
-      "..."])])
+     ["face full of yaml"
+      "...very similar yaml"
+      "duplication is bad"])])
 
-(def copy-pasta
+(def templates-by-helm-example
   [:section
-   [:img {:src "img/inventory-1.png"}]])
-
-(def templates
-  [:section
+   [:h3 "Templates (Helm example)"]
    [:pre
-     "apiVersion: v1\nkind: Service\nmetadata:\n  name: {{ template \"minecraft.fullname\" . }}\n  labels:\n    app: {{ template \"minecraft.fullname\" . }}\n    chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n    release: \"{{ .Release.Name }}\"\n    heritage: \"{{ .Release.Service }}\"\nspec:\n  type: {{ .Values.minecraftServer.serviceType }}\n  ports:\n  - name: minecraft\n    port: 25565\n    targetPort: minecraft\n    protocol: TCP\n  selector:\n    app: {{ template \"minecraft.fullname\" . }}"]
-    ;[:code {:class "hljs" :data-trim "" :data-noescape ""} "apiVersion: v1\nkind: Service\nmetadata:\n  name: {{ template \"minecraft.fullname\" . }}\n  labels:\n    app: {{ template \"minecraft.fullname\" . }}\n    chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n    release: \"{{ .Release.Name }}\"\n    heritage: \"{{ .Release.Service }}\"\nspec:\n  type: {{ .Values.minecraftServer.serviceType }}\n  ports:\n  - name: minecraft\n    port: 25565\n    targetPort: minecraft\n    protocol: TCP\n  selector:\n    app: {{ template \"minecraft.fullname\" . }}"]]
-   [:img {:src "img/helm-template"}]])
+    "apiVersion: v1\nkind: Service\nmetadata:\n  name: {{ template \"minecraft.fullname\" . }}\n  labels:\n    app: {{ template \"minecraft.fullname\" . }}\n    chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n    release: \"{{ .Release.Name }}\"\n    heritage: \"{{ .Release.Service }}\"\nspec:\n  type: {{ .Values.minecraftServer.serviceType }}\n  ports:\n  - name: minecraft\n    port: 25565\n    targetPort: minecraft\n    protocol: TCP\n  selector:\n    app: {{ template \"minecraft.fullname\" . }}"]])
+   ;[:code {:class "hljs" :data-trim "" :data-noescape ""} "apiVersion: v1\nkind: Service\nmetadata:\n  name: {{ template \"minecraft.fullname\" . }}\n  labels:\n    app: {{ template \"minecraft.fullname\" . }}\n    chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n    release: \"{{ .Release.Name }}\"\n    heritage: \"{{ .Release.Service }}\"\nspec:\n  type: {{ .Values.minecraftServer.serviceType }}\n  ports:\n  - name: minecraft\n    port: 25565\n    targetPort: minecraft\n    protocol: TCP\n  selector:\n    app: {{ template \"minecraft.fullname\" . }}"]]
+
+(def templating-at-microsvc-demo
+  [:section
+   (note
+     [:div
+      [:pre "cd ~/git/sips/microservices-demo/deploy/kubernetes/helm-chart/templates"]
+      [:pre "grep '{{' *"]
+      [:pre "cd ~/git/sips/gitea-helm-chart/templates/gitea"]])
+   [:h3 "example-config"]
+   [:h4 "(sockshop / gitea)"]])
 
 (def template-downsides
   [:section
-   [:h4 "downsides of templating"]
+   (note [:ul
+          [:li "manifests -> upgrades"]
+          [:li "values -> copy/pasta vs inventory"]])
+
+   [:h3 "downsides of templating"]
    (bulletpoints
-     ["we need to change the manifests"
+     ["we need to template (change) the manifests"
       "we need to provide the values"])])
 
-; TODO short helm explanation and show templates
-; TODO show folder full of values.yaml files (lack of proper inventory)
-
-(def template-downsides-no-big-deal-aight
+(def what-we-want
   [:section
-   [:h4 "change the manifests?"
-    (bulletpoints
-      ["bespoken apps"
-       "Common Off-The-Shelf (COTS) apps"])]])
+   (note
+     [:p
+      [:ul
+       [:li "ez upgrades -> no path-overlap with upstream"]
+       [:li "inventory -> duplication within value files"]]
+      "next: can we apply templating to all our apps and workflows?"])
+   [:h3 "Goals"]
+   (bulletpoints
+     ["DRY"
+      "Easy upgrades"
+      "Inventory (what makes app instances special)"])])
 
+(def types-of-applications
+  [:section
+   (note
+     [:p "can we apply templating to all our apps and workflows?"
+      [:ul
+       [:li "bespoke: 'build yourself', origins in clothing industry"]
+       [:li "COTS: eg. Products from Atlassian stack"]]])
+   [:h3 "kinds of apps and workflows"]
+   (bulletpoints
+     ["bespoke apps"
+      "Common Off-The-Shelf (COTS) apps"])])
 
 (def kustomize
   [:section
-   [:h4 "kustomize to the rescue"]
+   [:h3 "kustomize"]
    (bulletpoints
      ["templating without placeholders"
-      "this ain't templating!!!11"
-      "...that's a good thing :)"
-      "but we're still having "])])
+      "kustomize knows where to put the values"
+      "this ain't templating !!!11"
+      "...that's a good thing :-)"])])
 
-(def controller-first-encounter
+(def kustomize-examples-1)
+
+(def workflows-bespoke
   [:section
-   [:p "we declare stuff, then..."]
-   [:img {:src "img/magical-dr-evil.jpg"}]
-   [:p "the state is as we desired?"]])
+   {:data-background-image "img/workflowBespoke.jpg" :data-background-size "contain"}
+   [:p " "]])
 
-(def controllers-alien-meme
+(def workflows-cots
   [:section
-   [:img {:src "img/controllers-alien.jpg"}]])
-
-(def cots-and-bespoken-apps)
+   {:data-background-image "img/workflowOts.jpg" :data-background-size "contain"}
+   [:p " "]])
 
 
 (defn all
@@ -140,13 +197,21 @@
    intro
    intro-2
    intro-positive
+   controller-first-encounter
+   controllers-alien-meme
    imparative-vs-declarative
    imparative-vs-declarative-2
    imparative-vs-declarative-3
    sounds-ez
-   fun-begins
-   copy-pasta
-   templates])
-
-   ;controller-first-encounter
-   ;controllers-alien-meme])
+   fun-begins-DRY
+   fun-begins-DRY-2
+   duplications-DRY
+   DRY-make-point
+   templates-by-helm-example
+   templating-at-microsvc-demo
+   template-downsides
+   what-we-want
+   types-of-applications
+   kustomize
+   workflows-bespoke
+   workflows-cots])
