@@ -57,12 +57,18 @@
 (def controllers-simplified
   [:section
    {:data-background-image "img/controllers-simplified.png" :data-background-size "contain"}
+   (note [:div
+          [:p "just a quick look"]
+          [:p "control loop"]
+          [:p "controller watches/listens desired state and monitors objects"]
+          [:p "controller acts to deliver desired state"]
+          [:p "controller acts to deliver desired state"]])
    [:p " "]])
    ;[:img {:src "img/controllers-simplified.png"}]])
 
 [:p "k8s is extensible. for special things:  custom resource definitions"]
 
-(def imparative-vs-declarative
+(def imparative-vs-declarative-operate-on
   [:section
    [:h3 "k8s object management"]
    [:table {:style "white-space:nowrap;"}
@@ -75,9 +81,8 @@
      [:tr [:td "imperative obj config"][:td "individual files"][:td "moderate"]]
      [:tr [:td "declarative obj config"][:td "Directories of files"][:td "highest"]]]]])
 
-(def imparative-vs-declarative-2
+(def imparative-vs-declarative-kubectl
   [:section
-   [:section
     [:h3 "k8s object management"]
     [:h5 "imperative vs declarative"]
     [:table {:style "white-space:nowrap; width:auto;"}
@@ -89,25 +94,33 @@
       [:tr [:td "imp obj config"] [:td "kubectl create -f nginx.yaml"]]
       [:tr [:td ""] [:td "kubectl delete -f nginx.yaml"]]
       [:tr [:td ""] [:td "kubectl replace -f nginx.yaml"]]
-      [:tr [:td "decl obj config"] [:td "kubectl apply -R -f configs/"]]]]]
-   imparative-vs-declarative])
+      [:tr [:td "decl obj config"] [:td "kubectl apply -R -f configs/"]]]]])
 
-(def imparative-vs-declarative-3
+(def imparative-vs-declarative-recap
   [:section
-   [:h3 "recap: declarative cfg"]
-   (bulletpoints
-     ["forget about the HOW, the parts and infra"
-      "manipulate state by declaration of desired state"])])
+   [:section
+    (note [:div
+           [:p "!read!click!"]
+           [:p "let k8s do what it has been made for"]])
+    [:h3 "recap: declarative cfg"]
+    (bulletpoints
+      ["forget about the HOW, the parts and infra"
+       "manipulate state by declaration of desired state"])]
+   imparative-vs-declarative-kubectl])
+
 (def imparative-vs-declarative-4
   [:section
-   [:h3 "what we gain"]
-   (bulletpoints
-     ["git ❤ declarative approach"
-      "PR-Workflow gives you 'GitOps'"])])
-   ;[:p {:class "fragment"} "we like this - let's not lose it on our journey"]])
+   [:section
+    (note "!read! -> spare out below 'learning curve / operates on' comparison")
+    [:h3 "what we gain"]
+    (bulletpoints
+      ["git ❤ declarative approach"
+       "PR-Workflow gives you 'GitOps'"])]
+   imparative-vs-declarative-operate-on])
 
-(def sounds-ez
+(def sounds-ez-another-recap
   [:section {:class "fragment"}
+   (note [:p "quick summary and CLOC (fun begins) dramatic pause -> increase pace"])
    [:h3 "sounds doable!"]
    [:ol
     [:li {:class "fragment"} "Write the App"]
@@ -117,6 +130,7 @@
 
 (def fun-begins-DRY
   [:section
+   (note "'What if I told you' missed meme opportunity (matrix/morpheus)")
    [:h3 "what if..."]
    [:p "Stages"]
    [:img {:src "img/stages.png"}]])
@@ -126,7 +140,6 @@
    [:h3 "what if..."]
    [:p "Customizations"]
    [:p [:img {:src "img/gopher-orig.png" :style "max-width:120px"}]]
-
    [:p
     [:img {:src "img/gopher-fabulous-viking.png" :style "max-width:120px; margin:30px"}]
     [:img {:src "img/gopher-cptn-death-docker.png" :style "max-width:120px; margin:10px"}]
@@ -134,11 +147,16 @@
 
 (def duplications-DRY
   [:section
+   (note [:div
+          [:p "with only 2 stages times 3 customers we got quite a lot of duplication"]
+          [:p "bad things like long living feature branches would make this even worse"]])
    [:img {:src "img/stages-n-customizations.png"}]])
 
 (def DRY-make-point
-  [:section ;TODO add missing notes starting from here
-   (note "")
+  [:section
+   (note [:div
+          [:p "!read! (conclude)"]
+          [:p "!transition! 'We got experience!' after ansible/chef/puppet/bash and what not: this time we'll get it right"]])
    [:h4  "My point here is..."]
    [:h3 "DRY"]
    (bulletpoints
@@ -146,10 +164,18 @@
       "...very similar yaml"
       "duplication is bad"])])
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;   END OF PROBLEM SPACE PART      ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ; TODO add more visual stuff and examples
 
 (def templates-by-helm-example
   [:section
+   (note [:div
+          [:p "when helm chart new -> matches author's requirements -> little to no templating"]
+          [:p "the longer it lives -> more templating -> until it's more like:"]
+          [:p "i dont like the k8s api specs, let me put the config into a flat K/V-map trololol"]]) ; TODO this should be a slide with example and grumpy face/cat
    [:h3 "Templates (Helm example)"]
    [:pre
     "apiVersion: v1\nkind: Service\nmetadata:\n  name: {{ template \"minecraft.fullname\" . }}\n  labels:\n    app: {{ template \"minecraft.fullname\" . }}\n    chart: \"{{ .Chart.Name }}-{{ .Chart.Version }}\"\n    release: \"{{ .Release.Name }}\"\n    heritage: \"{{ .Release.Service }}\"\nspec:\n  type: {{ .Values.minecraftServer.serviceType }}\n  ports:\n  - name: minecraft\n    port: 25565\n    targetPort: minecraft\n    protocol: TCP\n  selector:\n    app: {{ template \"minecraft.fullname\" . }}"]])
@@ -236,11 +262,9 @@
    controller-first-encounter
    controllers-alien-meme
    controllers-simplified
-   ;
-   imparative-vs-declarative-2
-   imparative-vs-declarative-3
+   imparative-vs-declarative-recap
    imparative-vs-declarative-4
-   sounds-ez
+   sounds-ez-another-recap
    fun-begins-DRY
    fun-begins-DRY-2
    duplications-DRY
