@@ -16,10 +16,11 @@
   [:section
    [:table
     [:tr
-       [:td [:p {:style "vertical-align:middle"}
-             [:img {:src "img/kazesberger.jpg" :style "max-height:200px;"}]
-             [:p "Klaus Azesberger"]
-             [:p "@PsychodelicDad"]]]
+       [:td {:style "vertical-align:middle"}
+        [:div
+         [:img {:src "img/kazesberger.jpg" :style "max-height:200px;"}]
+         [:p "Klaus Azesberger"]
+         [:p "@PsychodelicDad"]]]
      [:td [:img {:src "img/bearingpoint.png"}]]]]])
 
 (def intro-2
