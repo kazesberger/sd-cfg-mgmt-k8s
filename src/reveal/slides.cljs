@@ -12,9 +12,15 @@
    [:h1 "K8s Config Mgmt"]
    [:h3 "Beginners guide"]])
 
-;(def intro
-;  [:section
-;   [:h3 "this is how you DONT do presentations:"]])
+(def intro-myself
+  [:section
+   [:table
+    [:tr
+       [:td [:p {:style "vertical-align:middle"}
+             [:img {:src "img/kazesberger.jpg" :style "max-height:200px;"}]
+             [:p "Klaus Azesberger"]
+             [:p "@PsychodelicDad"]]]
+     [:td [:img {:src "img/bearingpoint.png"}]]]]])
 
 (def intro-2
   [:section
@@ -149,6 +155,7 @@
   [:section
    (note [:div
           [:p "with only 2 stages times 3 customers we got quite a lot of duplication"]
+          [:p "here we got a face full of very similar yaml"]
           [:p "bad things like long living feature branches would make this even worse"]])
    [:img {:src "img/stages-n-customizations.png"}]])
 
@@ -156,19 +163,26 @@
   [:section
    (note [:div
           [:p "!read! (conclude)"]
-          [:p "!transition! 'We got experience!' after ansible/chef/puppet/bash and what not: this time we'll get it right"]])
+          [:p "!transition! so how can we get it right? let's start with templates"]])
    [:h4  "My point here is..."]
-   [:h3 "DRY"]
-   (bulletpoints
-     ["face full of yaml"
-      "...very similar yaml"
-      "duplication is bad"])])
+   [:h3 "DRY"]])
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   END OF PROBLEM SPACE PART      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; TODO add more visual stuff and examples
+(def templates-tools-overview
+  [:section
+   (note
+     [:div
+      [:p "let's have a look at templates"]
+      [:p "templates consist of the original file modified by replacing values with placeholders"]
+      [:p "we feed values back into the template and have our customized config"]])
+   [:h3 "templates"]
+   [:h5  {:class "fragment"} "tools"]
+   (bulletpoints
+     ["helm (go templates)"
+      "kapitan (jsonnet / jinja2 / kadet)"])])
 
 (def templates-by-helm-example
   [:section
@@ -209,10 +223,14 @@
    (note
      [:p
       [:ul
+       [:li "DRY - check"]
+       [:li "ez upgrades -> this goal is pushing us away from templates"]
        [:li "ez upgrades -> no path-overlap with upstream"]
-       [:li "inventory -> duplication within value files"]]
+       [:li "inventory=what makes app instances special"]
+       [:li "inventory=management of values -> DRY! -> kapitan(reclass)"]
+       [:li "but let's move on to the main problem and its solution"]]
       "next: can we apply templating to all our apps and workflows?"])
-   [:h3 "Goals"]
+   [:h3 "recap: Templates"]
    (bulletpoints
      ["DRY"
       "Easy upgrades"
@@ -221,14 +239,26 @@
 (def types-of-applications
   [:section
    (note
-     [:p "can we apply templating to all our apps and workflows?"
+     [:p "!start! can we apply templating to all our apps and workflows?"
       [:ul
-       [:li "bespoke: 'build yourself', origins in clothing industry"]
+       [:li "Bespoke: 'build yourself', origins in clothing industry"]
        [:li "COTS: eg. Products from Atlassian stack"]]])
    [:h3 "kinds of apps and workflows"]
    (bulletpoints
      ["bespoke apps"
       "Common Off-The-Shelf (COTS) apps"])])
+
+(def reconcile-updates
+  [:section
+   [:img {:src "img/ship-reconciling-updates.png"}]])
+
+(def patches-dont-change-that-much
+  [:section
+   [:img {:src "img/ship-patches-dont-change-that-much.png"}]])
+
+(def dont-fork-patch
+  [:section
+   [:img {:src "img/ship-dontfork-patch.png"}]])
 
 (def kustomize
   [:section
@@ -239,7 +269,28 @@
       "this ain't templating !!!11"
       "...that's a good thing :-)"])])
 
-(def kustomize-examples-1) ; TODO show helm template -> kustomize example
+(def kustomize-examples-1
+  [:section
+   (note
+     [:div
+      [:p "gitea: from master to kustomize branch "]
+      [:pre "cd ~/git/sips/gitea-helm-chart/templates/gitea"]
+      [:pre "kb kustomize "]])
+   [:h3 "kustomize example/demo"]
+   [:h4 "(gitea)"]])
+
+(def patch-tools
+  [:section
+   [:h3 "patch tools"]
+   (bulletpoints
+     ["kustomize"
+      "helm template"
+      [:a {:href "https://github.com/replicatedhq/ship"} "Ship"]])])
+
+(def ship-screeny
+  [:section
+   {:data-background-image "img/ship-screeny.png" :data-background-size "contain"}
+   [:p " "]])
 
 (def workflows-bespoke
   [:section
@@ -251,8 +302,6 @@
    {:data-background-image "img/workflowOts.jpg" :data-background-size "contain"}
    [:p " "]])
 
-; TODO reference ship
-
 ; TODO operators
 ; TODO operators for stateful apps with complex operations tasks that'd normally require a human interaction.
 ; TODO (take stuff from todo.md regarding operators)
@@ -263,7 +312,7 @@
   "Add here all slides you want to see in your presentation."
   []
   [title-slide
-   ;intro
+   intro-myself
    intro-2
    intro-positive
    intro-of-resources-and-objects
@@ -277,11 +326,19 @@
    fun-begins-DRY-2
    duplications-DRY
    DRY-make-point
+   templates-tools-overview
    templates-by-helm-example
    templating-at-microsvc-demo
    template-downsides
    what-we-want
    types-of-applications
+   reconcile-updates
+   patches-dont-change-that-much
+   dont-fork-patch
    kustomize
+   kustomize-examples-1
+   patch-tools
+   ship-screeny
    workflows-bespoke
-   workflows-cots])
+   workflows-cots
+   intro-myself])
